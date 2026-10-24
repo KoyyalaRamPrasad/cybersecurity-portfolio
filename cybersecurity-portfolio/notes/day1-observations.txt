@@ -1,0 +1,27 @@
+
+Day 1 - Lab Connectivity and HTTP Headers
+
+Target: OWASP Juice Shop
+URL: http://127.0.0.1:3000
+Environment: Kali Linux with Docker
+
+Test performed:
+Sent an HTTP HEAD request using curl -I.
+
+Observed result:
+HTTP/1.1 200 OK
+
+Headers observed:
+Content-Type: text/html; charset=UTF-8
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+Access-Control-Allow-Origin: *
+
+Interpretation:
+The application responded successfully to the HTTP request.
+The response included headers related to content type,
+framing restrictions, and cross-origin browser access.
+
+Security assessment:
+These observations alone do not establish whether the
+application is vulnerable. Further testing is required.

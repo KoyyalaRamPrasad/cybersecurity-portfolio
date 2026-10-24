@@ -1,0 +1,211 @@
+
+Day 3 - Baseline HTTP Response
+
+Target: OWASP Juice Shop
+URL: http://127.0.0.1:3000/
+
+Observation:
+An initial request returned 200 OK.
+A subsequent request returned 304 Not Modified.
+
+Headers observed:
+If-None-Match
+If-Modified-Since
+ETag
+Last-Modified
+
+Interpretation:
+The browser sent conditional request headers.
+The server returned 304 Not Modified, indicating
+that the cached response could be reused.
+
+Security assessment:
+This behavior is normal and does not, by itself,
+indicate a vulnerability.
+
+
+
+Additional Observation - JSON Endpoint
+
+Endpoint: GET /rest/languages
+Target: http://127.0.0.1:3000
+
+Observed result:
+HTTP status: 200 OK
+Response content type: JSON
+Response body: JSON data
+
+Interpretation:
+The endpoint returned structured JSON data rather
+than an HTML webpage. The request succeeded.
+
+Security assessment:
+A successful response containing JSON does not,
+by itself, establish a security vulnerability.
+Further testing would be needed to assess whether
+the endpoint exposes sensitive or unauthorized data.
+
+
+
+
+Additional Observation - Response Headers
+
+Endpoint: GET /rest/languages
+
+Observed:
+HTTP status: 200 OK
+Content-Type: application/json; charset=utf-8
+
+Interpretation:
+The status indicates that the request succeeded.
+The Content-Type header identifies the response as
+JSON-formatted data.
+
+Security assessment:
+These observations alone do not establish a
+security vulnerability.
+
+
+
+
+Controlled Test - Invalid Email Login
+
+Test input:
+Email: not-an-email
+Password: TestPassword123!
+
+Request:
+Login request observed in Burp HTTP history.
+The request body contained the invalid email.
+
+Response:
+HTTP status: 401 Unauthorized
+Response body: Invalid email or password.
+
+Interpretation:
+The application returned an authentication failure
+message for the submitted login attempt.
+
+Security assessment:
+This test did not demonstrate an authentication
+bypass or confirm a vulnerability.
+
+
+
+
+Controlled Test - Login Input Comparison
+
+Test A:
+Email: not-an-email
+Response: 401 Unauthorized
+Message: Invalid email or password.
+
+Test B:
+Email: student@example.com
+Response: 401 Unauthorized
+Message: Invalid email or password.
+
+Interpretation:
+Both requests reached the application and failed
+authentication. The second email has a valid format,
+but account existence and password correctness were
+not established.
+
+Security assessment:
+No authentication bypass or confirmed input-validation
+vulnerability was demonstrated by these tests.
+
+
+
+
+API Observation - Language Endpoint
+
+Endpoint: GET /rest/languages
+Response: 200 OK
+Content: JSON containing language-related values
+
+Interpretation:
+The returned data appears relevant to the application's
+language selection functionality.
+
+Security assessment:
+No vulnerability was identified from this observation.
+Further testing would be required to assess other
+security properties of the endpoint.
+
+
+
+
+
+Response Header Review - Language Endpoint
+
+Endpoint: GET /rest/languages
+Status: HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+Headers observed:
+Access-Control-Allow-Origin: *
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+Feature-Policy: payment 'self'
+X-Recruiting: /#/jobs
+ETag: present
+Vary: Accept-Encoding
+
+Interpretation:
+The response allows cross-origin browser access under
+the applicable CORS rules. The nosniff and SAMEORIGIN
+headers provide browser-side protections. Other headers
+provide application or HTTP metadata.
+
+Security assessment:
+The wildcard CORS value is worth reviewing in context,
+but this response contains no evidence by itself that
+sensitive information is exposed or that a security
+boundary is bypassed. No confirmed vulnerability has
+been established.
+
+
+
+
+
+
+
+
+
+Controlled Test - CORS Origin Header
+
+Endpoint: GET /rest/languages
+Test Origin: https://example.com
+
+Observed result:
+HTTP status: 200 OK
+Access-Control-Allow-Origin: *
+
+Interpretation:
+The server returned the language data and wildcard
+CORS header when the request included the test Origin.
+
+Security assessment:
+This result alone does not demonstrate a CORS
+vulnerability. The data observed was language-related,
+and no sensitive-data exposure or security-boundary
+bypass was established.
+
+
+
+Route Observation - Jobs Page
+
+Route: /#/jobs
+Source: X-Recruiting response header
+
+Observed result:
+The route loaded a page successfully in the browser.
+
+Interpretation:
+The application supports navigation to this route.
+The custom response header references the same route.
+
+Security assessment:
+The existence of a working page does not, by itself,
+demonstrate a security vulnerability.

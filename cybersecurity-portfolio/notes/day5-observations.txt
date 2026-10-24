@@ -1,0 +1,85 @@
+
+Day 5 - Login Baseline Observation
+
+Test:
+Submitted dummy credentials to the local Juice Shop login page.
+
+Email:
+student@example.com
+
+Result:
+HTTP 401 Unauthorized
+
+Interpretation:
+The server did not authenticate the tested login request.
+
+Security assessment:
+This is expected behavior for invalid credentials.
+The observation does not establish an authentication vulnerability.
+
+
+
+
+
+Day 5 - SQL Injection Authentication Bypass
+
+Application:
+OWASP Juice Shop running locally in my lab.
+
+Challenge:
+Login Admin
+
+Test:
+Used a SQL injection input in the login form to test authentication.
+
+Observed result:
+The application displayed a successful Login Admin challenge message
+on the Score Board.
+
+Evidence:
+D5-01-login-admin-solved.png
+
+Security impact:
+SQL injection allowed authentication bypass and access to the
+administrator account in this intentionally vulnerable application.
+
+Recommended remediation:
+1. Use parameterized SQL queries.
+2. Avoid building SQL statements by concatenating user input.
+3. Enforce server-side authentication and authorization checks.
+4. Test login functionality after applying the fix.
+
+
+
+
+
+
+SOC Investigation - Failed Login Log Check
+
+Application:
+Local OWASP Juice Shop running in Docker.
+
+Test event:
+Submitted invalid dummy credentials through the login form.
+
+Request:
+POST /rest/user/login
+
+HTTP response:
+401 Unauthorized
+
+Log review:
+Reviewed recent Docker container logs after the test.
+
+Observed result:
+The collected output contained challenge-restoration messages.
+It did not show the failed login attempt.
+
+Conclusion:
+The available Docker logs were insufficient to confirm whether
+the application records individual failed login attempts.
+
+SOC lesson:
+A failed HTTP login response and a logged security event are
+different things. Analysts must verify that the required events
+are actually collected before building detections.

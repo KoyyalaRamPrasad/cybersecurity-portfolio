@@ -1,0 +1,62 @@
+SOC Investigation - Repeated Failed Login Detection
+
+Objective:
+Detect repeated failed login attempts from one source IP.
+
+Data source:
+Simulated training dataset:
+soc/data/login_events.csv
+
+Detection script:
+soc/detect_failed_logins.py
+
+Detection rule:
+Five or more failed login attempts from one source IP
+within five minutes.
+
+Test result:
+PASS
+
+Observed alert:
+192.168.1.20 had 5 failed logins within 5 minutes.
+
+Validation:
+The script detected the expected pattern in the simulated
+training dataset.
+
+Limitations:
+The dataset is simulated and does not represent real
+Juice Shop logs or a confirmed security incident.
+The alert indicates suspicious activity, not proof of an attack.
+
+Recommended response:
+Review the source IP, correlate authentication events,
+check for successful logins following repeated failures,
+and apply appropriate rate limiting and account protections.
+
+
+
+
+
+
+
+Detection Validation
+
+Positive test:
+Input: login_events.csv
+Expected: Alert for repeated failed logins.
+Actual: Alert generated for 192.168.1.20.
+Result: PASS
+
+Negative test:
+Input: negative_test.csv
+Expected: No repeated-failed-login alert.
+Actual: No alert generated.
+Result: PASS
+
+Conclusion:
+The detection script passed both controlled tests.
+
+Limitation:
+Both datasets contain simulated events. Further testing
+with representative real logs is required before operational use.

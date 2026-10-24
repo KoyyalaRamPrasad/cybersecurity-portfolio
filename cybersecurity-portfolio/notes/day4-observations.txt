@@ -1,0 +1,29 @@
+
+Day 4 - Product Reviews API Observation
+
+Target:
+OWASP Juice Shop running locally at http://127.0.0.1:3000
+
+Request:
+GET /rest/products/1/reviews
+
+Observed result:
+HTTP 200 OK in Burp Repeater.
+The response contained JSON review data.
+
+Fields examined:
+Review message, author, product association, and likes count.
+
+Interpretation:
+The endpoint returned review information associated with
+product ID 1. The product field identifies the product
+associated with a review.
+
+Security assessment:
+Public product reviews may be expected application behavior.
+This observation alone does not establish an IDOR vulnerability.
+
+Limitations:
+Only the observed request and response are documented.
+No vulnerability has been confirmed from this observation.
+EOF

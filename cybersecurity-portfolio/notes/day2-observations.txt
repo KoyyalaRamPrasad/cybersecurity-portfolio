@@ -1,0 +1,137 @@
+Day 2 - Burp Suite HTTP Traffic Inspection
+
+Target: Local OWASP Juice Shop
+URL: http://127.0.0.1:3000
+Tool: Burp Suite
+
+Test performed:
+Opened Juice Shop using Burp's built-in browser and
+inspected requests in Proxy > HTTP history.
+
+Observed request:
+GET /socket.io/?EIO=4&transport=polling
+Host: 127.0.0.1:3000
+
+Observed response:
+Status: 200 OK
+Body: Text or protocol data
+
+Interpretation:
+The selected request was sent to the local application's
+Socket.IO endpoint. The server returned a successful
+response containing protocol data.
+
+Security assessment:
+This observation alone does not establish a vulnerability.
+Further testing is required to assess security.
+
+
+
+
+
+
+Additional observation - Homepage request
+
+Request:
+GET /
+Host: 127.0.0.1:3000
+
+Response:
+Status: 200 OK
+Body: HTML content
+
+Interpretation:
+The homepage request received a successful response
+containing HTML content.
+
+Security assessment:
+This observation alone does not establish whether the
+application is vulnerable.
+
+
+
+
+Additional test - User-Agent header
+
+Request:
+GET /
+User-Agent: Ram-Lab-Test
+
+Test performed:
+Changed the User-Agent header in Burp Repeater
+and resent the request to the local Juice Shop.
+
+Observed result:
+HTTP/1.1 200 OK
+The response still contained homepage HTML.
+
+Conclusion:
+The homepage request succeeded with the modified
+User-Agent value. No vulnerability was established
+by this test.
+
+Tool:
+Burp Suite Repeater
+
+
+
+
+Additional test - Login POST request
+
+Target:
+Local OWASP Juice Shop
+
+Tool:
+Burp Suite HTTP history
+
+Test performed:
+Submitted dummy login credentials through the
+application's login form and inspected the request
+and response.
+
+Request method:
+POST
+
+Request body:
+Contained email and password fields.
+
+Observed response:
+HTTP 401 Unauthorized
+
+Response body:
+An error message was returned.
+
+Interpretation:
+The server rejected the login attempt as
+unauthenticated. The error message provides
+additional context about the failed attempt.
+
+Security assessment:
+This result is consistent with a failed login.
+It does not establish a security vulnerability.
+
+
+
+
+Additional observation - Cookie headers
+
+Homepage GET:
+No Cookie header was observed in the selected request.
+
+Login POST:
+A Cookie header was observed:
+language=en; welcomebanner_status=dismiss
+
+Failed login response:
+No Set-Cookie header was observed.
+
+Interpretation:
+The login request included cookies associated with
+the application's language and welcome-banner state.
+The failed login response did not contain a
+Set-Cookie header.
+
+Security assessment:
+These observations alone do not establish a
+vulnerability or prove that the application never
+uses authentication cookies or sessions.
